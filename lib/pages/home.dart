@@ -4,12 +4,17 @@ import 'package:face_net_authentication/pages/db/databse_helper.dart';
 import 'package:face_net_authentication/pages/doctors_sign_in.dart';
 import 'package:face_net_authentication/pages/sign-in.dart';
 import 'package:face_net_authentication/pages/sign-up.dart';
+import 'package:face_net_authentication/pages/widgets/constantfold/size_config.dart';
+import 'package:face_net_authentication/pages/widgets/home/home_screen.dart';
 import 'package:face_net_authentication/services/camera.service.dart';
 import 'package:face_net_authentication/services/ml_service.dart';
 import 'package:face_net_authentication/services/face_detector_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:bloc/bloc.dart';
+import 'cubit/keysprivate_cubit.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -43,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
@@ -120,7 +126,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => SignInByDoc(),
+                                  builder: (BuildContext context) =>
+                                      SignInByDoc(),
                                 ),
                               );
                             },
@@ -206,7 +213,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           InkWell(
-                            onTap: _launchURL,
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (ctx) {
+                                return BlocProvider(
+                                create: (context) => KeysprivateCubit()..init(),
+                                child: SignIn(),
+                              );
+                              }));
+                              
+                            },
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),

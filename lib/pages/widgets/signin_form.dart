@@ -1,10 +1,13 @@
 import 'package:face_net_authentication/locator.dart';
+import 'package:face_net_authentication/pages/cubit/keysprivate_cubit.dart';
 import 'package:face_net_authentication/pages/models/user.model.dart';
 import 'package:face_net_authentication/pages/profile.dart';
 import 'package:face_net_authentication/pages/widgets/app_button.dart';
 import 'package:face_net_authentication/pages/widgets/app_text_field.dart';
+import 'package:face_net_authentication/pages/widgets/home/home_screen.dart';
 import 'package:face_net_authentication/services/camera.service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInSheet extends StatelessWidget {
   SignInSheet({Key? key, required this.user}) : super(key: key);
@@ -15,13 +18,14 @@ class SignInSheet extends StatelessWidget {
 
   Future _signIn(context, user) async {
     if (user.password == _passwordController.text) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => Profile(
-                    user.user,
-                    imagePath: _cameraService.imagePath!,
-                  )));
+      BlocProvider.of<KeysprivateCubit>(context).userAdded(user.user);
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+        //return HomeScreen();
+        return BlocProvider.value(
+          value: BlocProvider.of<KeysprivateCubit>(context),
+          child: HomeScreen(),
+        );
+      }));
     } else {
       showDialog(
         context: context,

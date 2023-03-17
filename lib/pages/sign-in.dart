@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:face_net_authentication/locator.dart';
+import 'package:face_net_authentication/pages/cubit/keysprivate_cubit.dart';
 import 'package:face_net_authentication/pages/doctors_sign_in.dart';
 import 'package:face_net_authentication/pages/doctors_sign_up.dart';
 import 'package:face_net_authentication/pages/models/user.model.dart';
@@ -14,6 +15,7 @@ import 'package:face_net_authentication/services/ml_service.dart';
 import 'package:face_net_authentication/services/face_detector_service.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -113,7 +115,8 @@ class SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    Widget header = CameraHeader("Doctor's login", onBackPressed: _onBackPressed);
+    Widget header =
+        CameraHeader("Patient's login", onBackPressed: _onBackPressed);
     Widget body = getBodyWidget();
     Widget? fab;
     if (!_isPictureTaken) fab = AuthButton(onTap: onTap);
@@ -128,6 +131,16 @@ class SignInState extends State<SignIn> {
     );
   }
 
+  // signInSheet({@required FaceUser? user}) => user == null
+  //     ? Container(
+  //         width: MediaQuery.of(context).size.width,
+  //         padding: EdgeInsets.all(20),
+  //         child: Text(
+  //           'User not found 😞',
+  //           style: TextStyle(fontSize: 20),
+  //         ),
+  //       )
+  //     : SignInSheet(user: user);
   signInSheet({@required FaceUser? user}) => user == null
       ? Container(
           width: MediaQuery.of(context).size.width,
@@ -137,5 +150,8 @@ class SignInState extends State<SignIn> {
             style: TextStyle(fontSize: 20),
           ),
         )
-      : SignInSheet(user: user);
+      : BlocProvider.value(
+          value: BlocProvider.of<KeysprivateCubit>(context),
+          child: SignInSheet(user: user),
+        );
 }
