@@ -110,12 +110,12 @@ class _CategoriesState extends State<Categories> {
                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadPdf()));
                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadPdf()));
                   Fluttertoast.showToast(msg: "Add Report");
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => UploadRecords()));
-                  BlocProvider(
-                    create: (context) => KeysprivateCubit(),
-                    child: UploadRecords(),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                    return BlocProvider.value(
+                      value: BlocProvider.of<KeysprivateCubit>(context),
+                      child: UploadRecords(),
+                    );
+                  }));
                 } else if (categories[index]["key"] == "5") // Add product
                 {
                   // Navigator.push(context,

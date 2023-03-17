@@ -40,7 +40,8 @@ class Body extends StatelessWidget {
             HomeHeader(),
             SizedBox(height: getProportionateScreenWidth(25)),
             DiscountBanner(),
-            Categories(uid: BlocProvider.of<KeysprivateCubit>(context).uID,),
+            
+            BlocProvider.value(value: BlocProvider.of<KeysprivateCubit>(context),child: Categories(uid: BlocProvider.of<KeysprivateCubit>(context).uID,),)
 
 
           ],
